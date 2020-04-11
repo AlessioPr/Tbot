@@ -11,8 +11,13 @@ repositories {
     mavenCentral()
 }
 
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
     compile group: 'org.telegram', name: 'telegrambots', version: '4.7'
-
+    compile group: 'org.springframework', name: 'spring-context', version: '5.2.5.RELEASE'
+    compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
 }
