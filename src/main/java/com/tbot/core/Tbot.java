@@ -10,50 +10,33 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import java.util.List;
-
 @Service
 public class Tbot extends TelegramLongPollingBot {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(Tbot.class);
-
-    @Value("${tbot.token}")
-    private String botToken;
 
     @Value("${tbot.name}")
     private String botName;
 
-    public void sendMessage(Message message, String messageText) {
-        SendMessage sendMessage = new SendMessage();
-        sendMessage.enableMarkdown(true);
-        sendMessage.setChatId(message.getChatId());
-        sendMessage.setReplyToMessageId(message.getMessageId());
-        sendMessage.setText(messageText);
+    @Value("${tbot.token}")
+    private String botToken;
 
-        try {
-            execute(sendMessage);
-        } catch (TelegramApiException e) {
-            LOGGER.error("Something went wrong! {}", e.getMessage());
-        }
+    private static final Logger LOG = LoggerFactory.getLogger(Tbot.class);
 
-    }
-
-    @Override
     public void onUpdateReceived(Update update) {
+
         Message message = update.getMessage();
-        if (update.getMessage() != null ) {
-            if (message.getText().equals("Привет")) { ;
-                sendMessage(message, "И тебе привет!");
+
+        if (message != null) {
+            SendMessage sendMessage = new SendMessage();
+            sendMessage.setChatId(message.getChatId());
+            sendMessage.setText("Привет, Юлиана!");
+            try {
+                execute(sendMessage); // Sending our message object to user
+            } catch (TelegramApiException e) {
+                LOG.error("Something went wrong! {}", e.getMessage());
             }
         }
     }
 
-    @Override
-    public void onUpdatesReceived(List<Update> updates) {
-
-    }
-
-    @Override
     public String getBotUsername() {
         return this.botName;
     }
